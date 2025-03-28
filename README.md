@@ -6,6 +6,7 @@ A simple and lightweight modloader for .NET games and apps.
 
 ### NuGet
 
+_Not published yet_
 ```bash
 dotnet add package Spectrum
 ```
@@ -23,12 +24,12 @@ using Spectrum;
 using Spectrum.Attributes;
 
 [ModInfo("My Mod", "com.me.mymod", "Me", "1.0.0")]
-public class MyMod : IMod
+public class MyMod : SimpleMod
 {
-    public void Loaded(SpectrumLoader loader)
+    public override void Loaded(SpectrumLoader loader)
     {
-        var info = loader.GetModInfo(this);
-        Console.WriteLine($"Loaded {info.Name} v{info.Version} by {info.Author}");
+        base.Loaded(loader);
+        Console.WriteLine($"Loaded {Name} v{Version} by {Author}");
     }
 }
 
@@ -40,7 +41,7 @@ public class MyMod : IMod
 using Spectrum;
 
 // Somewhere in your code
-SpectrumLoader<BaseMod> loader = SpectrumLoader.CreateDefault();
+SpectrumLoader<SimpleMod> loader = SpectrumLoader.CreateDefault();
 loader.PreloadMods("path/to/your/mod/folder");
 loader.ModLoaded += (mod) => {
     // Do something with the loaded mods
@@ -57,12 +58,12 @@ using Spectrum.Attributes;
 
 [ModInfo("My Mod", "com.me.mymod", "Me", "1.0.0")]
 [ModDependency("com.me.othermod", ">1.0.0")]
-public class MyMod : IMod
+public class MyMod : SimpleMod
 {
-    public void Loaded(SpectrumLoader loader)
+    public override void Loaded(SpectrumLoader loader)
     {
-        var info = loader.GetModInfo(this);
-        Console.WriteLine($"Loaded {info.Name} v{info.Version} by {info.Author}");
+        base.Loaded(loader);
+        Console.WriteLine($"Loaded {Name} v{Version} by {Author}");
     }
 }
 ```
@@ -83,14 +84,14 @@ Spectrum uses 2 different formats for dependencies' version ranges:
 
 ## Custom Mod Types
 
-You can create your own mod types by implementing `IMod`. Here is an example of a custom mod type:
+You can create your own mod types by implementing `IMod`. Here is an example of a custom mod type (implementation similar to `SimpleMod`):
 ```cs
 using MyGame;
 using Spectrum;
 
 namespace MyModdingAPI;
 
-public class MyModType : IMod
+public abstract class MyModType : IMod
 {
     private ModInfo _modInfo;
 
