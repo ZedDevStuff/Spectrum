@@ -212,6 +212,7 @@ public class SpectrumLoader<TModType> : SpectrumLoader where TModType : class, I
         foreach (var mod in _loadedMods)
         {
             mod.Value.Loaded(this);
+            ModLoaded?.Invoke(mod.Value);
         }
     }
 }
